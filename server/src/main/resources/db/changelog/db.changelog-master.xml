@@ -1,0 +1,275 @@
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="2022-02-10-initialisation" author="Nikolay Malygin">
+
+        <createTable tableName="_site">
+            <column name="id"           type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name"         type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="path"         type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="status"       type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status_time"  type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="crawler_id"   type="bigint"/>
+            <column name="indexer_id"   type="bigint"/>
+        </createTable>
+
+        <createTable tableName="_page">
+            <column name="id"                       type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="path"                     type="varchar(768)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="code"                     type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="content"                  type="clob">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_update"              type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="blacklist"                type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="has_index"                type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="crawler_statistics_id"    type="bigint"/>
+            <column name="indexer_statistics_id"    type="bigint"/>
+            <column name="site_id"                  type="bigint"/>
+        </createTable>
+
+        <createTable tableName="_lemma">
+            <column name="id"                       type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="lemma"                    type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="frequency"                type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="indexer_statistics_id"    type="bigint"/>
+            <column name="site_id"                  type="bigint"/>
+        </createTable>
+
+        <createTable tableName="_error">
+            <column name="id"                       type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="text"                     type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="error_time"               type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="crawler_statistics_id"    type="bigint"/>
+            <column name="page_id"                  type="bigint"/>
+            <column name="site_id"                  type="bigint"/>
+        </createTable>
+
+        <createTable tableName="_lindex">
+            <column name="id"                       type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="_rank"                    type="double">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lemma_id"                 type="bigint"/>
+            <column name="page_id"                  type="bigint"/>
+            <column name="indexer_statistics_id"    type="bigint"/>
+        </createTable>
+
+        <createTable tableName="_crawler_settings">
+            <column name="id"                       type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="preset_name"              type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="preset"                   type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description"              type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="delay"                    type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="parallelism"              type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timeout"                  type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="reconnect"                type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_agent"               type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="referrer"                 type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="_crawler_statistics">
+            <column name="id"                       type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="ending_time"              type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="starting_time"            type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="site_id"                  type="bigint"/>
+        </createTable>
+
+        <createTable tableName="_indexer_settings">
+            <column name="id"                       type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="preset_name"              type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="preset"                   type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description"              type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="_indexer_selector_weight">
+            <column name="indexer_settings_id"      type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="weight"                   type="double">
+                <constraints nullable="false"/>
+            </column>
+            <column name="selectors"                type="varchar(255)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="_indexer_statistics">
+            <column name="id"                       type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="ending_time"              type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="starting_time"            type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="site_id"                  type="bigint"/>
+        </createTable>
+
+        <createIndex tableName="_site" indexName="path_index">
+            <column name="path"/>
+        </createIndex>
+
+        <createIndex tableName="_page" indexName="path_index">
+            <column name="path"/>
+        </createIndex>
+
+        <createIndex tableName="_lemma" indexName="lemma_index">
+            <column name="lemma"/>
+        </createIndex>
+
+        <createIndex tableName="_lindex" indexName="page_indexes">
+            <column name="page_id"/>
+        </createIndex>
+        <createIndex tableName="_lindex" indexName="lemma_indexes">
+            <column name="lemma_id"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseTableName="_crawler_statistics" baseColumnNames="site_id"
+                                 constraintName="_crawler_statistics_site_id_site_id"
+                                 referencedTableName="_site" referencedColumnNames="id"
+                                 deleteCascade="true"/>
+
+        <addForeignKeyConstraint baseTableName="_error" baseColumnNames="crawler_statistics_id"
+                                 constraintName="_error_crawler_statistics_id_crawler_statistics_id"
+                                 referencedTableName="_crawler_statistics" referencedColumnNames="id"
+                                 deleteCascade="true"/>
+        <addForeignKeyConstraint baseTableName="_error" baseColumnNames="page_id"
+                                 constraintName="_error_page_id_page_id"
+                                 referencedTableName="_page" referencedColumnNames="id"
+                                 deleteCascade="true"/>
+        <addForeignKeyConstraint baseTableName="_error" baseColumnNames="site_id"
+                                 constraintName="_error_site_id_site_id"
+                                 referencedTableName="_site" referencedColumnNames="id"
+                                 deleteCascade="true"/>
+
+        <addForeignKeyConstraint baseTableName="_indexer_selector_weight" baseColumnNames="indexer_settings_id"
+                                 constraintName="_indexer_selector_weight_indexer_settings_id_indexer_settings_id"
+                                 referencedTableName="_indexer_settings" referencedColumnNames="id"
+                                 deleteCascade="true"/>
+
+        <addForeignKeyConstraint baseTableName="_indexer_statistics" baseColumnNames="site_id"
+                                 constraintName="_indexer_statistics_site_id_site_id"
+                                 referencedTableName="_site" referencedColumnNames="id"
+                                 deleteCascade="true"/>
+
+        <addForeignKeyConstraint baseTableName="_lemma" baseColumnNames="indexer_statistics_id"
+                                 constraintName="_lemma_indexer_statistics_id_indexer_statistics_id"
+                                 referencedTableName="_indexer_statistics" referencedColumnNames="id"
+                                 deleteCascade="true"/>
+        <addForeignKeyConstraint baseTableName="_lemma" baseColumnNames="site_id"
+                                 constraintName="_lemma_site_id_site_id"
+                                 referencedTableName="_site" referencedColumnNames="id"
+                                 deleteCascade="true"/>
+
+        <addForeignKeyConstraint baseTableName="_lindex" baseColumnNames="indexer_statistics_id"
+                                 constraintName="_lindex_indexer_statistics_id_crawler_statistics_id"
+                                 referencedTableName="_crawler_statistics" referencedColumnNames="id"
+                                 deleteCascade="true"/>
+        <addForeignKeyConstraint baseTableName="_lindex" baseColumnNames="lemma_id"
+                                 constraintName="_lindex_lemma_id_lemma_id"
+                                 referencedTableName="_lemma" referencedColumnNames="id"
+                                 deleteCascade="true"/>
+        <addForeignKeyConstraint baseTableName="_lindex" baseColumnNames="page_id"
+                                 constraintName="_lindex_page_id_page_id"
+                                 referencedTableName="_page" referencedColumnNames="id"
+                                 deleteCascade="true"/>
+
+        <addForeignKeyConstraint baseTableName="_page" baseColumnNames="crawler_statistics_id"
+                                 constraintName="_page_crawler_statistics_id_crawler_statistics_id"
+                                 referencedTableName="_crawler_statistics" referencedColumnNames="id"
+                                 deleteCascade="true"/>
+        <addForeignKeyConstraint baseTableName="_page" baseColumnNames="indexer_statistics_id"
+                                 constraintName="_page_indexer_statistics_id_indexer_statistics_id"
+                                 referencedTableName="_indexer_statistics" referencedColumnNames="id"
+                                 deleteCascade="true"/>
+        <addForeignKeyConstraint baseTableName="_page" baseColumnNames="site_id"
+                                 constraintName="_page_site_id_site_id"
+                                 referencedTableName="_site" referencedColumnNames="id"
+                                 deleteCascade="true"/>
+
+        <addForeignKeyConstraint baseTableName="_site" baseColumnNames="crawler_id"
+                                 constraintName="_site_crawler_id_crawler_settings_id"
+                                 referencedTableName="_crawler_settings" referencedColumnNames="id"
+                                 deleteCascade="true"/>
+        <addForeignKeyConstraint baseTableName="_site" baseColumnNames="indexer_id"
+                                 constraintName="_site_indexer_id_indexer_settings_id"
+                                 referencedTableName="_indexer_settings" referencedColumnNames="id"
+                                 deleteCascade="true"/>
+
+    </changeSet>
+
+</databaseChangeLog>

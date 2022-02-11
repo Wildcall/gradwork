@@ -2,9 +2,9 @@ package ru.malygin.server.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.malygin.server.exception.IndexingHasAlreadyStartedException;
-import ru.malygin.server.exception.SiteNotFoundException;
-import ru.malygin.server.exception.SiteNotSavedException;
+import ru.malygin.server.exception.indexer.IndexingHasAlreadyStartedException;
+import ru.malygin.server.exception.site.SiteNotFoundException;
+import ru.malygin.server.exception.site.SiteNotSavedException;
 import ru.malygin.server.model.entity.IndexerSettings;
 import ru.malygin.server.model.entity.IndexerStatistics;
 import ru.malygin.server.model.entity.core.Page;
@@ -71,8 +71,6 @@ public class IndexerActionService {
     }
 
     private void updateLemmaFreq(Site site) {
-        lemmaService.findAllBySite(site).forEach(lemma -> {
-            lemma.setFrequency(indexService.countByLemmaId(lemma.getId()));
-        });
+        lemmaService.findAllBySite(site).forEach(lemma -> lemma.setFrequency(indexService.countByLemmaId(lemma.getId())));
     }
 }

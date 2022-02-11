@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Service;
-import ru.malygin.server.exception.SiteNotFoundException;
+import ru.malygin.server.exception.site.SiteNotFoundException;
 import ru.malygin.server.model.entity.core.Page;
 import ru.malygin.server.model.entity.core.Site;
 import ru.malygin.server.model.other.SearchResponse;

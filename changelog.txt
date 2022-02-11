@@ -1,0 +1,12 @@
+11-02-2022
+Added hierarchy in package exception;
+Implemented ErrorController;
+Changed ErrorDto;
+Changed ErrorService;
+Created ErrorNotFoundException;
+Implemented PageController;
+Implemented PageService;
+Created PageDto;
+Created PageViews;
+Changed PageRepository;
+Changed SiteController;

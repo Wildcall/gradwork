@@ -4,9 +4,14 @@ import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.malygin.server.exception.*;
+import ru.malygin.server.exception.crawler.CrawlerDefaultSettingsNotFoundException;
+import ru.malygin.server.exception.crawler.CrawlerSettingsNotFoundException;
+import ru.malygin.server.exception.indexer.IndexerSettingsNotFoundException;
+import ru.malygin.server.exception.site.SiteAlreadyExistsException;
+import ru.malygin.server.exception.site.SiteNotFoundException;
 import ru.malygin.server.model.dto.SiteDto;
 import ru.malygin.server.model.dto.transfer.SiteViews;
+import ru.malygin.server.model.entity.core.SiteStatus;
 import ru.malygin.server.service.SiteService;
 
 import java.util.List;
@@ -24,13 +29,17 @@ public class SiteController {
     @GetMapping
     @JsonView({SiteViews.IdPathNameStatus.class})
     public ResponseEntity<?> findAll() {
-        List<SiteDto> response = SiteDto.fromListSite(siteService.findAll());
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(SiteDto.fromListSite(siteService.findAll()));
+    }
+
+    @GetMapping("/status")
+    public ResponseEntity<?> getStatusList() {
+        return ResponseEntity.ok(SiteStatus.values());
     }
 
     @GetMapping("{id}")
     @JsonView({SiteViews.FullView.class})
-    public ResponseEntity<?> findOne(
+    public ResponseEntity<?> findById(
             @PathVariable Long id) {
         try {
             SiteDto response = SiteDto.fromSite(siteService.findById(id));
@@ -38,34 +47,6 @@ public class SiteController {
         } catch (SiteNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-    }
-
-    @GetMapping("{id}/stat")
-    public ResponseEntity<?> getTotalStat(
-            @PathVariable Long id) {
-        // todo implement me
-        return ResponseEntity.ok("Not implemented yet. Total statistics for site with id - {" + id + "} should be here...");
-    }
-
-    @GetMapping("{id}/page")
-    public ResponseEntity<?> getAllPage(
-            @PathVariable Long id) {
-        // todo implement me
-        return ResponseEntity.ok("Not implemented yet. All pages for site with id - {" + id + "} should be here...");
-    }
-
-    @GetMapping("{id}/error")
-    public ResponseEntity<?> getAllError(
-            @PathVariable Long id) {
-        // todo implement me
-        return ResponseEntity.ok("Not implemented yet. All errors for site with id - {" + id + "} should be here...");
-    }
-
-    @DeleteMapping("{id}/error")
-    public ResponseEntity<?> deleteAllError(
-            @PathVariable Long id) {
-        // todo implement me
-        return ResponseEntity.ok("Not implemented yet. All errors for site with id - {" + id + "} should be deleted...");
     }
 
     @PostMapping

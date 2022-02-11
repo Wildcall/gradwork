@@ -27,7 +27,7 @@ public class SiteDto {
     @JsonView(SiteViews.IdPathNameStatus.class)
     private Long id;
 
-    @Null(groups = {SiteViews.New.class, SiteViews.Update.class})
+    @Null(groups = {SiteViews.New.class})
     @ValueOfEnum(enumClass = SiteStatus.class, groups = {SiteViews.Update.class})
     @JsonView(SiteViews.IdPathNameStatus.class)
     private String status;
@@ -61,9 +61,8 @@ public class SiteDto {
     private IndexerSettings indexer;
 
     public static SiteDto fromSite(Site site) {
-        if (site == null) {
+        if (site == null)
             return null;
-        }
         SiteDto siteDto = new SiteDto();
         siteDto.setId(site.getId());
         siteDto.setStatus(site.getStatus().name());
@@ -98,9 +97,8 @@ public class SiteDto {
     }
 
     public static List<SiteDto> fromListSite(List<Site> sites) {
-        if (sites == null) {
-            return Collections.emptyList();
-        }
-        return sites.stream().map(SiteDto::fromSite).collect(Collectors.toList());
+        return sites == null
+                ? Collections.emptyList()
+                : sites.stream().map(SiteDto::fromSite).collect(Collectors.toList());
     }
 }

@@ -1,8 +1,8 @@
 package ru.malygin.server.service;
 
 import org.springframework.stereotype.Service;
-import ru.malygin.server.exception.PageStatisticsNotFoundException;
-import ru.malygin.server.exception.SiteNotFoundException;
+import ru.malygin.server.exception.stat.PageStatisticsNotFoundException;
+import ru.malygin.server.exception.site.SiteNotFoundException;
 import ru.malygin.server.model.entity.CrawlerStatistics;
 import ru.malygin.server.model.entity.IndexerStatistics;
 import ru.malygin.server.model.entity.core.Site;

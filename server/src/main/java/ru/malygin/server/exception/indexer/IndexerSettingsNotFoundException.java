@@ -1,4 +1,4 @@
-package ru.malygin.server.exception;
+package ru.malygin.server.exception.indexer;
 
 public class IndexerSettingsNotFoundException extends Exception{
     public IndexerSettingsNotFoundException(String message) {

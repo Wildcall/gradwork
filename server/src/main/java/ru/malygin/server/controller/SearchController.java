@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.malygin.server.exception.SiteNotFoundException;
+import ru.malygin.server.exception.site.SiteNotFoundException;
 import ru.malygin.server.service.SearchService;
 
 @RestController

@@ -1,7 +1,11 @@
 package ru.malygin.server.service;
 
 import org.springframework.stereotype.Service;
-import ru.malygin.server.exception.*;
+import ru.malygin.server.exception.crawler.CrawlerDefaultSettingsNotFoundException;
+import ru.malygin.server.exception.crawler.CrawlerSettingsNotFoundException;
+import ru.malygin.server.exception.indexer.IndexerSettingsNotFoundException;
+import ru.malygin.server.exception.site.SiteAlreadyExistsException;
+import ru.malygin.server.exception.site.SiteNotFoundException;
 import ru.malygin.server.model.entity.CrawlerSettings;
 import ru.malygin.server.model.entity.IndexerSettings;
 import ru.malygin.server.model.entity.core.Site;
@@ -48,6 +52,12 @@ public class SiteService {
             existByName(site.getName());
             existSite.setName(site.getName());
             existSite.setStatusTime(LocalDateTime.now());
+        }
+
+        if (!existSite.getStatus().equals(site.getStatus())) {
+            if(site.getStatus().equals(SiteStatus.INORDER)) {
+                existSite.setStatus(site.getStatus());
+            }
         }
 
         if (site.getCrawler() != null && !existSite.getCrawler().equals(site.getCrawler())) {

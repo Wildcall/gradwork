@@ -3,15 +3,14 @@ package ru.malygin.server.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.malygin.server.configuration.IndexerConfiguration;
-import ru.malygin.server.exception.IndexerSettingsAlreadyExistsException;
-import ru.malygin.server.exception.IndexerSettingsCannotBeRemovedException;
-import ru.malygin.server.exception.IndexerSettingsNotFoundException;
-import ru.malygin.server.exception.IndexerSettingsWrongFormatException;
+import ru.malygin.server.exception.indexer.IndexerSettingsAlreadyExistsException;
+import ru.malygin.server.exception.indexer.IndexerSettingsCannotBeRemovedException;
+import ru.malygin.server.exception.indexer.IndexerSettingsNotFoundException;
+import ru.malygin.server.exception.indexer.IndexerSettingsWrongFormatException;
 import ru.malygin.server.model.entity.IndexerSettings;
 import ru.malygin.server.repository.IndexerSettingsRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -60,7 +59,7 @@ public class IndexerService {
         return saveFlag ? isr.save(eis) : eis;
     }
 
-    public Object delete(Long id) throws IndexerSettingsNotFoundException, IndexerSettingsCannotBeRemovedException {
+    public Long delete(Long id) throws IndexerSettingsNotFoundException, IndexerSettingsCannotBeRemovedException {
         IndexerSettings is = findById(id);
         if (!is.getSites().isEmpty()) {
             throw new IndexerSettingsCannotBeRemovedException("Indexer settings with id " + id +
@@ -82,18 +81,7 @@ public class IndexerService {
     }
 
     public IndexerSettings getDefault() {
-        Optional<IndexerSettings> eis = isr.findByPresetName("default");
-
-        if (eis.isPresent())
-            return eis.get();
-
-        try {
-            save(indexerConf.getDefault());
-        } catch (IndexerSettingsWrongFormatException | IndexerSettingsAlreadyExistsException e) {
-            e.printStackTrace();
-        }
-
-        return isr.findByPresetName("default").get();
+        return isr.findByPresetName("default").orElse(isr.save(indexerConf.getDefault()));
     }
 
     private void existByPresetName(String name) throws IndexerSettingsAlreadyExistsException {

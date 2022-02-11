@@ -67,25 +67,6 @@ Site with id: {id} not found
 </details>
 
 <details>
- <summary>Get a statistics for specific site </summary>
-
-#### **Request**:
-```
-GET /site/{id}/stat
-
-{ base url }/site/{id}/stat
- ```
-#### **Response**:
-```
-Not implemented yet
- ```
-#### **Exceptions**:
-```
-Not implemented yet
-```
-</details>
-
-<details>
  <summary>Get all pages for specific site </summary>
 
 #### **Request**:
@@ -691,6 +672,25 @@ GET /stat
 
 { base url }/stat
  ``` 
+#### **Response**:
+```
+Not implemented yet
+ ```
+#### **Exceptions**:
+```
+Not implemented yet
+```
+</details>
+
+<details>
+ <summary>Get a total statistics for specific site </summary>
+
+#### **Request**:
+```
+GET /stat?siteId={id}
+
+{ base url }/stat?siteId={id}
+ ```
 #### **Response**:
 ```
 Not implemented yet

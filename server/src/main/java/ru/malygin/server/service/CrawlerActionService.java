@@ -2,9 +2,9 @@ package ru.malygin.server.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.malygin.server.exception.IndexingHasAlreadyStartedException;
-import ru.malygin.server.exception.SiteNotFoundException;
-import ru.malygin.server.exception.SiteNotSavedException;
+import ru.malygin.server.exception.indexer.IndexingHasAlreadyStartedException;
+import ru.malygin.server.exception.site.SiteNotFoundException;
+import ru.malygin.server.exception.site.SiteNotSavedException;
 import ru.malygin.server.model.entity.CrawlerStatistics;
 import ru.malygin.server.model.entity.core.Site;
 import ru.malygin.server.model.entity.core.SiteStatus;

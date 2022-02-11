@@ -3,9 +3,9 @@ package ru.malygin.server.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.malygin.server.configuration.CrawlerConfiguration;
-import ru.malygin.server.exception.CrawlerSettingsAlreadyExistsException;
-import ru.malygin.server.exception.CrawlerSettingsCannotBeRemovedException;
-import ru.malygin.server.exception.CrawlerSettingsNotFoundException;
+import ru.malygin.server.exception.crawler.CrawlerSettingsAlreadyExistsException;
+import ru.malygin.server.exception.crawler.CrawlerSettingsCannotBeRemovedException;
+import ru.malygin.server.exception.crawler.CrawlerSettingsNotFoundException;
 import ru.malygin.server.model.entity.CrawlerSettings;
 import ru.malygin.server.repository.CrawlerSettingsRepository;
 

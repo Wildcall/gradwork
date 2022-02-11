@@ -1,4 +1,4 @@
-package ru.malygin.server.exception;
+package ru.malygin.server.exception.site;
 
 public class SiteNotFoundException extends Exception{
     public SiteNotFoundException(String message) {

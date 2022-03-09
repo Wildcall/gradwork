@@ -7,7 +7,7 @@ import ru.malygin.server.model.entity.IndexerStatistics;
 import ru.malygin.server.model.entity.core.LIndex;
 import ru.malygin.server.model.entity.core.Page;
 import ru.malygin.server.model.entity.core.Site;
-import ru.malygin.server.service.IndexService;
+import ru.malygin.server.service.LIndexService;
 import ru.malygin.server.service.LemmaService;
 
 import java.util.HashMap;
@@ -19,10 +19,15 @@ import java.util.concurrent.RecursiveAction;
 public class Indexer extends RecursiveAction {
 
     private static LemmaService lemmaService;
-    private static IndexService indexService;
+    private static LIndexService LIndexService;
 
-    public static void init(LemmaService lemmaService, IndexService indexService) {
-        Indexer.indexService = indexService;
+    /**
+     * Устанавливает сервисы для алгоритма индексации
+     * @param lemmaService LemmaService
+     * @param LIndexService IndexService
+     */
+    public static void init(LemmaService lemmaService, LIndexService LIndexService) {
+        Indexer.LIndexService = LIndexService;
         Indexer.lemmaService = lemmaService;
     }
 
@@ -31,6 +36,13 @@ public class Indexer extends RecursiveAction {
     private final IndexerStatistics indexerStatistics;
     private final Map<String, Double> selectorsWeight;
 
+    /**
+     * Создание объекта индексатора для страницы
+     * @param site сайт на котором ведется индексация
+     * @param page страница на которой ведется индексация
+     * @param indexerStatistics объект сохранения статистики
+     * @param selectorsWeight весовые коэффициенты для селекторов
+     */
     public Indexer(Site site,
                    Page page,
                    IndexerStatistics indexerStatistics,
@@ -41,6 +53,9 @@ public class Indexer extends RecursiveAction {
         this.selectorsWeight = selectorsWeight;
     }
 
+    /**
+     * Запускает алгоритм нахождения и создания индексов
+     */
     @Override
     public void compute() {
         if (page.getCode() == 200) {
@@ -52,9 +67,9 @@ public class Indexer extends RecursiveAction {
     }
 
     private void prepare() {
-        List<LIndex> existLIndices = indexService.findAllByPage(page);
+        List<LIndex> existLIndices = LIndexService.findAllByPage(page);
         if (!existLIndices.isEmpty()) {
-            indexService.delete(existLIndices);
+            LIndexService.delete(existLIndices);
         }
     }
 

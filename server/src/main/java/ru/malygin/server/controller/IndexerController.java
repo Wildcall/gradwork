@@ -48,7 +48,7 @@ public class IndexerController {
             @Validated(IndexerSettingsViews.New.class) @RequestBody IndexerSettingsDto isd) {
         try {
             return ResponseEntity.ok(IndexerSettingsDto.fromIndexerSettings(indexerService.save(isd.toIndexerSettings())));
-        } catch (IndexerSettingsAlreadyExistsException | IndexerSettingsWrongFormatException e) {
+        } catch (IndexerSettingsAlreadyExistsException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

@@ -66,6 +66,11 @@ public class CrawlerSettingsDto {
     @JsonView(CrawlerSettingsViews.FullView.class)
     private String referrer;
 
+    /**
+     * Преобразует объект CrawlerSettings в модель отображения CrawlerSettingsDto
+     * @param cs объект настроек алгоритма поиска и обхода
+     * @return CrawlerSettingsDto
+     */
     public static CrawlerSettingsDto fromCrawlerSettings(CrawlerSettings cs) {
         if (cs == null) {
             return null;
@@ -85,6 +90,10 @@ public class CrawlerSettingsDto {
         return csd;
     }
 
+    /**
+     * Преобразует текущую модель отображения CrawlerSettingsDto в объект CrawlerSettings
+     * @return CrawlerSettings
+     */
     public CrawlerSettings toCrawlerSettings() {
         CrawlerSettings cs = new CrawlerSettings();
         cs.setPreset(preset);
@@ -100,6 +109,11 @@ public class CrawlerSettingsDto {
         return cs;
     }
 
+    /**
+     * Преобразует List< CrawlerSettings > в List< CrawlerSettingsDto >
+     * @param lcs лист настроек алгоритма поиска и обхода
+     * @return List< CrawlerSettingsDto >
+     */
     public static List<CrawlerSettingsDto> fromListCrawlerSettings(List<CrawlerSettings> lcs) {
         if (lcs == null) {
             return Collections.emptyList();

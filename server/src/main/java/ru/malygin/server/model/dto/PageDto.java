@@ -37,6 +37,11 @@ public class PageDto {
     @JsonView(PageViews.FullView.class)
     private LocalDateTime lastUpdate;
 
+    /**
+     * Преобразует объект Page в модель отображения PageDto
+     * @param page объект страницы
+     * @return PageDto
+     */
     public static PageDto fromPage(Page page) {
         if (page == null)
             return null;
@@ -51,6 +56,10 @@ public class PageDto {
         return pageDto;
     }
 
+    /**
+     * Преобразует текущую модель отображения PageDto в объект Page
+     * @return Page
+     */
     public Page toPage() {
         Page page = new Page();
         page.setId(id);
@@ -58,6 +67,11 @@ public class PageDto {
         return page;
     }
 
+    /**
+     * Преобразует List< Page > в List< PageDto >
+     * @param pages лист страниц
+     * @return List< SiteDto >
+     */
     public static List<PageDto> fromListPage(List<Page> pages) {
         return pages == null
                 ? Collections.emptyList()

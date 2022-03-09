@@ -28,6 +28,11 @@ public class Crawler extends RecursiveTask<Set<String>> {
     private static PageService pageService;
     private static ErrorService errorService;
 
+    /**
+     * Устанавливает сервисы для алгоритма обхода и сохранения сайта
+     * @param pageService PageService
+     * @param errorService ErrorService
+     */
     public static void init(PageService pageService,
                             ErrorService errorService) {
         Crawler.pageService = pageService;
@@ -44,6 +49,9 @@ public class Crawler extends RecursiveTask<Set<String>> {
     private Page page;
     private Set<String> linkSet;
 
+    /**
+     * Запускает алгоритм обхода сайта и сохранения страницы
+     */
     public Crawler(Site site, String path, CrawlerStatistics crawlerStatistics) {
         this.site = site;
         this.crawlerSettings = site.getCrawler();

@@ -60,6 +60,11 @@ public class SiteDto {
 
     private IndexerSettings indexer;
 
+    /**
+     * Преобразует объект Site в модель отображения SiteDto
+     * @param site объект сайта
+     * @return SiteDto
+     */
     public static SiteDto fromSite(Site site) {
         if (site == null)
             return null;
@@ -76,6 +81,10 @@ public class SiteDto {
         return siteDto;
     }
 
+    /**
+     * Преобразует текущую модель отображения SiteDto в объект Site
+     * @return Site
+     */
     public Site toSite() {
         Site site = new Site();
         site.setPath(path);
@@ -96,6 +105,11 @@ public class SiteDto {
         return site;
     }
 
+    /**
+     * Преобразует List< Site > в List< SiteDto >
+     * @param sites лист сайтов
+     * @return List< SiteDto >
+     */
     public static List<SiteDto> fromListSite(List<Site> sites) {
         return sites == null
                 ? Collections.emptyList()

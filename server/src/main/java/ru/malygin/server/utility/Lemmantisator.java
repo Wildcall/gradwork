@@ -8,6 +8,13 @@ import java.util.*;
 
 public class Lemmantisator {
 
+    /**
+     * Метод разбивает исходный текст на отдельные леммы, считает количество одинаковых лем и умножает количество на весовой коэффициент.
+     * Возвращает пары лемма и её суммарный вес в данном тексте
+     * @param text исходный текст
+     * @param weight весовой коэффициент для данного текста
+     * @return Map< String, Double >
+     */
     public static Map<String, Double> getLemmasWeight(String text, Double weight) {
         Map<String, Double> lemmas = new HashMap<>();
         String[] textList = prepareText(text);
@@ -39,6 +46,11 @@ public class Lemmantisator {
         return lemmas;
     }
 
+    /**
+     * Метод разбивает исходный текст на отдельные леммы, и возвращает список лем.
+     * @param text исходный текст
+     * @return List< String >
+     */
     public static List<String> getLemmas(String text) {
         return getLemmasWeight(text, 1.0).keySet().stream().toList();
     }

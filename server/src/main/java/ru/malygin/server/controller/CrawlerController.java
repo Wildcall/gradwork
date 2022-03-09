@@ -85,7 +85,7 @@ public class CrawlerController {
         try {
             crawlerActionService.start(id);
             return ResponseEntity.ok("Start saving for id: " + id);
-        } catch (SiteNotFoundException | IndexingHasAlreadyStartedException | SiteNotSavedException e) {
+        } catch (SiteNotFoundException | IndexingHasAlreadyStartedException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

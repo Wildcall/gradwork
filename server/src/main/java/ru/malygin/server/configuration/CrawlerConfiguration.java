@@ -36,6 +36,10 @@ public class CrawlerConfiguration {
     @Value("${crawler.referrer:https://www.google.com}")
     private String referrer;
 
+    /**
+     * Возвращает объект со стандартными значениями настроек для алгоритма обхода и сохранения сайтов.
+     * @return CrawlerSettings
+     */
     public CrawlerSettings getDefault() {
         CrawlerSettings cs = new CrawlerSettings();
         cs.setPreset(preset);

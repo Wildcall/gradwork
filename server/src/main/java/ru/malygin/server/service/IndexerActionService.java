@@ -24,23 +24,30 @@ public class IndexerActionService {
     private final SiteService siteService;
     private final StatisticsService statService;
     private final PageService pageService;
-    private final IndexService indexService;
+    private final LIndexService LIndexService;
     private final LemmaService lemmaService;
 
     public IndexerActionService(SiteService siteService,
                                 StatisticsService statService,
                                 PageService pageService,
                                 LemmaService lemmaService,
-                                IndexService indexService) {
+                                LIndexService LIndexService) {
         this.siteService = siteService;
         this.pageService = pageService;
         this.statService = statService;
-        this.indexService = indexService;
+        this.LIndexService = LIndexService;
         this.lemmaService = lemmaService;
-        Indexer.init(lemmaService, indexService);
+        Indexer.init(lemmaService, LIndexService);
     }
 
 
+    /**
+     * Запускает алгоритм индексации сайта в многопоточном режиме
+     * @param id сайта
+     * @throws SiteNotFoundException если сайта с id не найдено
+     * @throws SiteNotSavedException если сайт еще не был сохранен в бд
+     * @throws IndexingHasAlreadyStartedException если индексация для данного сайта уже запущена
+     */
     public void start(Long id) throws SiteNotFoundException, SiteNotSavedException, IndexingHasAlreadyStartedException {
         Site site = siteService.findById(id);
 
@@ -71,6 +78,6 @@ public class IndexerActionService {
     }
 
     private void updateLemmaFreq(Site site) {
-        lemmaService.findAllBySite(site).forEach(lemma -> lemma.setFrequency(indexService.countByLemmaId(lemma.getId())));
+        lemmaService.findAllBySite(site).forEach(lemma -> lemma.setFrequency(LIndexService.countByLemmaId(lemma.getId())));
     }
 }

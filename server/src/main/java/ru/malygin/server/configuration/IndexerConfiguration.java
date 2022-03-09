@@ -28,6 +28,10 @@ public class IndexerConfiguration {
     @Value("${indexing.weights:1,0.8}")
     private String weights;
 
+    /**
+     * Возвращает объект со стандартными значениями настроек для алгоритма индексации.
+     * @return IndexerSettings
+     */
     public IndexerSettings getDefault() {
         IndexerSettings ifw = new IndexerSettings();
         ifw.setPreset(preset);

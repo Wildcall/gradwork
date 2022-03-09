@@ -20,11 +20,11 @@ import java.util.stream.Collectors;
 public class LemmaService {
 
     private final LemmaRepository lemmaRepository;
-    private final IndexService indexService;
+    private final LIndexService LIndexService;
 
-    public LemmaService(LemmaRepository lemmaRepository, IndexService indexService) {
+    public LemmaService(LemmaRepository lemmaRepository, LIndexService LIndexService) {
         this.lemmaRepository = lemmaRepository;
-        this.indexService = indexService;
+        this.LIndexService = LIndexService;
     }
 
     public synchronized void saveAll(Map<String, Double> lemmasMap,
@@ -49,7 +49,7 @@ public class LemmaService {
 
         savingLemmas.addAll((List<Lemma>) lemmaRepository.saveAll(lemmaSet));
 
-        indexService.saveAll(savingLemmas.stream()
+        LIndexService.saveAll(savingLemmas.stream()
                 .map(lemma -> new LIndex(lemmasMap.get(lemma.getLemma()), page, lemma, is))
                 .collect(Collectors.toSet()));
     }

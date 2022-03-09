@@ -34,7 +34,13 @@ public class SiteService {
         this.statisticsService = statisticsService;
     }
 
-    public Site save(Site site) throws SiteAlreadyExistsException, CrawlerDefaultSettingsNotFoundException {
+    /**
+     * Сохранение сайта в БД
+     * @param site сайт
+     * @return Site после сохранения в БД и присвоения id
+     * @throws SiteAlreadyExistsException если название сайта уже используется
+     */
+    public Site save(Site site) throws SiteAlreadyExistsException, CrawlerSettingsNotFoundException {
         existByPath(site.getPath());
         existByName(site.getName());
         site.setStatus(SiteStatus.INORDER);
@@ -45,6 +51,14 @@ public class SiteService {
         return siteRepository.save(site);
     }
 
+    /**
+     * Обновляет сайт с заданным id на новый сайт
+     * @param id сайта для обновления
+     * @param site новый сайт
+     * @return Site после сохранения в БД и присвоения id
+     * @throws SiteNotFoundException если сайт с заданным id не найден
+     * @throws SiteAlreadyExistsException если название сайта уже используется
+     */
     public Site update(Long id, Site site) throws SiteNotFoundException, SiteAlreadyExistsException, CrawlerSettingsNotFoundException, IndexerSettingsNotFoundException {
         Site existSite = findById(id);
 
@@ -73,6 +87,13 @@ public class SiteService {
         return siteRepository.save(existSite);
     }
 
+    /**
+     * Обновляет статус заданного сайта
+     * @param id сайта
+     * @param status новый статус
+     * @return Site после сохранения в БД и присвоения id
+     * @throws SiteNotFoundException если сайт с заданным id не найден
+     */
     public Site update(Long id, SiteStatus status) throws SiteNotFoundException {
         Site existSite = findById(id);
 
@@ -84,6 +105,12 @@ public class SiteService {
         return existSite;
     }
 
+    /**
+     * Удаляет сайт из БД
+     * @param id сайта
+     * @return id сайта после удаления
+     * @throws SiteNotFoundException если сайт с заданным id не найден
+     */
     public Long delete(Long id) throws SiteNotFoundException {
         Site site = findById(id);
         statisticsService.deleteAllIndexerStatBySite(site);
@@ -91,10 +118,20 @@ public class SiteService {
         return id;
     }
 
+    /**
+     * Возвращает список всех сайтов сохраненных в БД
+     * @return List< Site >
+     */
     public List<Site> findAll() {
         return (List<Site>) siteRepository.findAll();
     }
 
+    /**
+     * Возвращает сайт с заданным id
+     * @param id сайта
+     * @return Site
+     * @throws SiteNotFoundException если сайт с заданным id не найден
+     */
     public Site findById(Long id) throws SiteNotFoundException {
         return siteRepository.findById(id)
                 .orElseThrow(() -> new SiteNotFoundException("Site with id: " + id + " not found"));

@@ -14,8 +14,6 @@ import ru.malygin.server.model.dto.transfer.SiteViews;
 import ru.malygin.server.model.entity.core.SiteStatus;
 import ru.malygin.server.service.SiteService;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/v1/site")
 public class SiteController {
@@ -55,7 +53,7 @@ public class SiteController {
             @Validated(SiteViews.New.class) @RequestBody SiteDto siteDto) {
         try {
             return ResponseEntity.ok(SiteDto.fromSite(siteService.save(siteDto.toSite())));
-        } catch (SiteAlreadyExistsException | CrawlerDefaultSettingsNotFoundException e) {
+        } catch (SiteAlreadyExistsException | CrawlerSettingsNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

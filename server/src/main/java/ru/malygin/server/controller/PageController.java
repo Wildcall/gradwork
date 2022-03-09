@@ -30,7 +30,7 @@ public class PageController {
         try {
             return ResponseEntity.ok(
                     PageDto.fromListPage(
-                            pageService.find(siteId)));
+                            pageService.findBySite(siteId)));
         } catch (SiteNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -55,7 +55,7 @@ public class PageController {
             @Validated(PageViews.Update.class) @RequestBody List<PageDto> pages) {
         return ResponseEntity.ok(
                 PageDto.fromListPage(
-                        pageService.update(
+                        pageService.updateAll(
                                 pages.stream().map(PageDto::toPage).collect(Collectors.toList()))));
 
     }

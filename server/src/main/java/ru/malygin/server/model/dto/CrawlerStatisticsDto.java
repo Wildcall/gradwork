@@ -35,6 +35,11 @@ public class CrawlerStatisticsDto {
     @JsonView(CrawlerStatisticsViews.FullView.class)
     private List<Long> errors;
 
+    /**
+     * Преобразует объект CrawlerStatistics в модель отображения CrawlerStatisticsDto
+     * @param cs объект статистики
+     * @return CrawlerStatisticsDto
+     */
     public static CrawlerStatisticsDto fromPageStatistics(CrawlerStatistics cs) {
         if (cs == null) {
             return null;
@@ -50,6 +55,11 @@ public class CrawlerStatisticsDto {
         return psd;
     }
 
+    /**
+     * Преобразует List< CrawlerStatistics > в List< CrawlerStatisticsDto >
+     * @param csl лист статистики
+     * @return List< CrawlerStatisticsDto >
+     */
     public static List<CrawlerStatisticsDto> fromPageStatisticsList(List<CrawlerStatistics> csl) {
         if (csl == null) {
             return Collections.emptyList();

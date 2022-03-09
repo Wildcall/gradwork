@@ -42,7 +42,11 @@ public class IndexerSettingsDto {
     @JsonView(IndexerSettingsViews.FullView.class)
     private Map<String, Double> selectorWeight;
 
-
+    /**
+     * Преобразует объект IndexerSettings в модель отображения IndexerSettingsDto
+     * @param is объект настроек алгоритма индексации
+     * @return SiteDto
+     */
     public static IndexerSettingsDto fromIndexerSettings(IndexerSettings is) {
         if (is == null) {
             return null;
@@ -57,6 +61,10 @@ public class IndexerSettingsDto {
         return isd;
     }
 
+    /**
+     * Преобразует текущую модель отображения IndexerSettingsDto в объект IndexerSettings
+     * @return IndexerSettings
+     */
     public IndexerSettings toIndexerSettings() {
         IndexerSettings is = new IndexerSettings();
         is.setPreset(preset);
@@ -67,6 +75,11 @@ public class IndexerSettingsDto {
         return is;
     }
 
+    /**
+     * Преобразует List< IndexerSettings > в List< IndexerSettingsDto >
+     * @param lis лист настроек алгоритма индексации
+     * @return List< IndexerSettings >
+     */
     public static List<IndexerSettingsDto> fromListIndexerSettings(List<IndexerSettings> lis) {
         if (lis == null) {
             return Collections.emptyList();

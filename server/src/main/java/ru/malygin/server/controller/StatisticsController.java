@@ -9,14 +9,6 @@ import ru.malygin.server.model.dto.transfer.CrawlerStatisticsViews;
 @RequestMapping("/api/v1/stat")
 public class StatisticsController {
 
-    /**
-     * <p>Returns statistics for the site or total statistics</p>
-     * <p>If <b>siteId != null</b> return statistics for specific site,
-     * else return total statistics</p>
-     *
-     * @param siteId The site id
-     * @return The statistics map
-     */
     @GetMapping
     public ResponseEntity<?> total(
             @RequestParam(required = false) Long siteId) {
@@ -24,14 +16,6 @@ public class StatisticsController {
         return ResponseEntity.ok("Not implemented yet. Total statistic should be here...");
     }
 
-    /**
-     * <p>Returns crawler records for specific site, or all records for all crawlers</p>
-     * <p>If <b>siteId != null</b> return crawler records for specific site,
-     * else return all records for all crawlers</p>
-     *
-     * @param siteId The site id
-     * @return The records map
-     */
     @GetMapping("/crawler")
     @JsonView({CrawlerStatisticsViews.IdTimeSiteId.class})
     public ResponseEntity<?> findAllCrawlerStat(

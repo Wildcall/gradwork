@@ -32,6 +32,11 @@ public class ErrorDto {
     @JsonView(ErrorViews.FullView.class)
     private String pagePath;
 
+    /**
+     * Преобразует объект Error в модель отображения ErrorDto
+     * @param error объект ошибки
+     * @return ErrorDto
+     */
     public static ErrorDto fromError(Error error) {
         if (error == null) {
             return null;
@@ -46,6 +51,11 @@ public class ErrorDto {
         return errorDto;
     }
 
+    /**
+     * Преобразует List< Error > в List< ErrorDto >
+     * @param errors лист ошибок
+     * @return List< ErrorDto >
+     */
     public static List<ErrorDto> fromListError(List<Error> errors) {
         if (errors == null) {
             return Collections.emptyList();

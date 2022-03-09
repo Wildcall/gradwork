@@ -32,12 +32,17 @@ public class CrawlerActionService {
         Crawler.init(pageService, errorService);
     }
 
-    public void start(Long id) throws SiteNotFoundException, IndexingHasAlreadyStartedException, SiteNotSavedException {
+    /**
+     * Запускает обход сайта в многопоточном режиме для сохранения страниц в базу данных
+     * @param id сайта
+     * @throws SiteNotFoundException если сайта с id не найдено
+     * @throws IndexingHasAlreadyStartedException если индексация для данного сайта уже запущена
+     */
+    public void start(Long id) throws SiteNotFoundException, IndexingHasAlreadyStartedException {
         Site site = siteService.findById(id);
 
         if (site.getStatus().equals(SiteStatus.SAVING) | site.getStatus().equals(SiteStatus.INDEXING))
             throw new IndexingHasAlreadyStartedException("Saving or indexing for site " + site.getPath() + " has already started");
-
 
         log.info("Start saving for site - " + site.getPath());
         siteService.update(id, SiteStatus.SAVING);
@@ -62,6 +67,10 @@ public class CrawlerActionService {
         }
     }
 
+    /**
+     * Останавливает запущенный алгоритм обхода сайта
+     * @param id сайта
+     */
     public void stop(Long id) {
         ForkJoinPool forkJoinPool = crawlerMap.get(id);
         if (forkJoinPool != null){

@@ -20,22 +20,29 @@ public class SearchService {
     private final SiteService siteService;
     private final LemmaService lemmaService;
     private final PageService pageService;
-    private final IndexService indexService;
+    private final LIndexService LIndexService;
 
     public SearchService(SiteService siteService,
                          LemmaService lemmaService,
                          PageService pageService,
-                         IndexService indexService) {
+                         LIndexService LIndexService) {
         this.siteService = siteService;
         this.lemmaService = lemmaService;
         this.pageService = pageService;
-        this.indexService = indexService;
+        this.LIndexService = LIndexService;
     }
 
+    /**
+     * Возвращает список объектов поискового ответа
+     * @param siteId сайта на котором ведется поиск
+     * @param query поисковая строка
+     * @return List<SearchResponse> список отсортирован по релевантности
+     * @throws SiteNotFoundException если сайт с заданным id не найден
+     */
     public List<SearchResponse> search(Long siteId, String query) throws SiteNotFoundException {
         Site existSite = siteService.findById(siteId);
         List<String> queryList = Lemmantisator.getLemmas(query);
-        List<Long> pageIdList = indexService.search(lemmaService.findAllByLemmasAndSite(queryList, existSite)).keySet().stream().toList();
+        List<Long> pageIdList = LIndexService.search(lemmaService.findAllByLemmasAndSite(queryList, existSite)).keySet().stream().toList();
         List<Page> pageList = pageService.findAllById(pageIdList);
         List<SearchResponse> responses = new ArrayList<>();
         pageList.forEach(page -> {

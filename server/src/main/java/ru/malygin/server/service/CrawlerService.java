@@ -26,11 +26,25 @@ public class CrawlerService {
         this.crawlerConf = crawlerConf;
     }
 
+    /**
+     * Сохраняет настройки алгоритма обхода в бд
+     * @param cs настройки
+     * @return CrawlerSettings после сохранения в бд с присвоенным id
+     * @throws CrawlerSettingsAlreadyExistsException если имя шаблона уже используется
+     */
     public CrawlerSettings save(CrawlerSettings cs) throws CrawlerSettingsAlreadyExistsException {
         existByPresetName(cs.getPresetName());
         return csr.save(cs);
     }
 
+    /**
+     * Обновляет настройки алгоритма обхода с заданным id, на новые
+     * @param id настроек для обновления
+     * @param cs новые настройки
+     * @return CrawlerSettings после сохранения в бд с присвоенным id
+     * @throws CrawlerSettingsNotFoundException если настройки с таким id не существуют
+     * @throws CrawlerSettingsAlreadyExistsException если имя шаблона уже используется
+     */
     public CrawlerSettings update(Long id, CrawlerSettings cs) throws CrawlerSettingsNotFoundException, CrawlerSettingsAlreadyExistsException {
         CrawlerSettings ecs = findById(id);
         boolean saveFlag = false;
@@ -84,6 +98,13 @@ public class CrawlerService {
         return saveFlag ? csr.save(ecs) : ecs;
     }
 
+    /**
+     * Удаляет настройки алгоритма обхода с заданным id из бд
+     * @param id настроек
+     * @return Long id удаленной настройки
+     * @throws CrawlerSettingsNotFoundException если настройки с таким id не существуют
+     * @throws CrawlerSettingsCannotBeRemovedException если настройки с таким id используется
+     */
     public Long delete(Long id) throws CrawlerSettingsNotFoundException, CrawlerSettingsCannotBeRemovedException {
         CrawlerSettings cs = findById(id);
         if (!cs.getSites().isEmpty()) {
@@ -94,17 +115,33 @@ public class CrawlerService {
         return id;
     }
 
+    /**
+     * Поиск всех настроек алгоритма обхода с маркировкой шаблон
+     * @param preset шаблон Boolean
+     * @return List< CrawlerSettings >
+     */
     public List<CrawlerSettings> findAll(Boolean preset) {
         if (preset != null)
             return csr.findAllByPreset(preset);
         return (List<CrawlerSettings>) csr.findAll();
     }
 
+    /**
+     * Поиск настроек алгоритма обхода с заданным id
+     * @param id настроек
+     * @return CrawlerSettings
+     * @throws CrawlerSettingsNotFoundException если настройки с таким id не существуют
+     */
     public CrawlerSettings findById(Long id) throws CrawlerSettingsNotFoundException {
         return csr.findById(id)
                 .orElseThrow(() -> new CrawlerSettingsNotFoundException("Crawler preset with id: " + id + " not found"));
     }
 
+    /**
+     * Возвращает default настройки алгоритма обхода из базы данных.
+     * Если их нет, делает запись в бд предустановленных настроек из crawler.properties
+     * @return CrawlerSettings
+     */
     public CrawlerSettings getDefault() {
         Optional<CrawlerSettings> ecs = csr.findByPresetName("default");
 
@@ -112,12 +149,12 @@ public class CrawlerService {
             return ecs.get();
 
         try {
-            save(crawlerConf.getDefault());
+            return save(crawlerConf.getDefault());
         } catch (CrawlerSettingsAlreadyExistsException e) {
             e.printStackTrace();
         }
 
-        return csr.findByPresetName("default").get();
+        return null;
     }
 
     private void existByPresetName(String name) throws  CrawlerSettingsAlreadyExistsException {

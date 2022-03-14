@@ -9,6 +9,7 @@
           hide-details
           solo-inverted
       />
+      <site-new v-on:open-tab="open"/>
     </v-toolbar>
     <v-data-table
         :headers="headers"
@@ -22,10 +23,12 @@
 </template>
 
 <script>
+import {mapActions, mapGetters} from "vuex";
+import SiteNew from "@/components/site/SiteNew";
 
 export default {
   name: "List",
-
+  components: {SiteNew},
   data() {
     return {
       search: '',
@@ -38,14 +41,30 @@ export default {
     }
   },
 
-  props: {
-    sites: [],
-    loading: Boolean,
+  computed: {
+    ...mapGetters({
+      sites: 'site/getSites',
+      loading: 'site/getLoading',
+    })
   },
 
   methods: {
+    ...mapActions({
+      fetchSites: 'site/fetchSites',
+      storageInitTabs: 'storage/initTabs',
+      storageAddTab: 'storage/addTab'
+    }),
+
     open(item) {
-      this.$emit('open-tab', {id: item.id, title: item.name})
+      this.storageAddTab({ link: '/site/' + item.id + '/edit', title: item.name })
+    }
+  },
+
+  mounted() {
+    if (this.sites.length === 0){
+      this.fetchSites().then(() => {
+        this.storageInitTabs()
+      })
     }
   }
 }

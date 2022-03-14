@@ -12,90 +12,55 @@
     <v-list dense>
       <v-list-item-group mandatory>
 
-        <v-list-item @click="$emit('action',items[0].action)">
+        <v-list-item @click="push(items[0].path)">
           <v-list-item-content>
             <v-list-item-title>
               {{ items[0].title }}
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item @click="$emit('action',items[1].action)">
+        <v-list-item @click="push(items[1].path)">
           <v-list-item-content>
             <v-list-item-title>
               {{ items[1].title }}
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-group no-action>
-          <template v-slot:activator>
-            <v-list-item-title>
-              {{ items[2].group }}
-            </v-list-item-title>
-          </template>
-          <v-list-group sub-group>
-            <template v-slot:activator>
-              <v-list-item-title>
-                {{ items[2].subgroup }}
-              </v-list-item-title>
-            </template>
-            <v-list-item @click="$emit('action',items[2].action)">
-              <v-list-item-content>
-                <v-list-item-title>
-                  {{ items[2].title }}
-                </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item @click="$emit('action',items[3].action)">
-              <v-list-item-content>
-                <v-list-item-title>
-                  {{ items[3].title }}
-                </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list-group>
-          <v-list-group sub-group>
-            <template v-slot:activator>
-              <v-list-item-title>
-                {{ items[4].subgroup }}
-              </v-list-item-title>
-            </template>
-            <v-list-item @click="$emit('action',items[4].action)">
-              <v-list-item-content>
-                <v-list-item-title>
-                  {{ items[4].title }}
-                </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item @click="$emit('action',items[5].action)">
-              <v-list-item-content>
-                <v-list-item-title>
-                  {{ items[5].title }}
-                </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list-group>
-        </v-list-group>
-        <v-list-item @click="$emit('action',items[6].action)">
+        <v-list-item @click="push(items[2].path)">
           <v-list-item-content>
             <v-list-item-title>
-              {{ items[6].title }}
+              {{ items[2].title }}
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item @click="$emit('action',items[7].action)">
+        <v-list-item @click="push(items[3].path)">
           <v-list-item-content>
             <v-list-item-title>
-              {{ items[7].title }}
+              {{ items[3].title }}
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item @click="push(items[4].path)">
+          <v-list-item-content>
+            <v-list-item-title>
+              {{ items[4].title }}
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item @click="push(items[5].path)">
+          <v-list-item-content>
+            <v-list-item-title>
+              {{ items[5].title }}
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 
         <v-divider class="mt-5 mb-5"/>
 
-        <v-list-item @click="$emit('action', items[8].action)">
+        <v-list-item @click="$emit(items[6].path)">
           <v-list-item-content>
             <v-list-item-title>
-              {{ items[8].title }}
+              {{ items[6].title }}
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
@@ -111,14 +76,28 @@ export default {
 
   data() {
     return {
-      tab: null
+      tab: null,
+      items: [
+        { title: 'Редактирование', path: 'edit' },
+        { title: 'Статистика', path: 'stat' },
+        { title: 'Crawler', path: 'crawler' },
+        { title: 'Indexer', path: 'presetCrawler' },
+        { title: 'Страницы', path: 'pages' },
+        { title: 'Ошибки', path: 'errors' },
+        { title: 'Закрыть', path: 'close' },
+      ],
     }
   },
 
   props: {
     title: String,
     subtext: String,
-    items: []
+  },
+
+  methods:{
+    push(path){
+      this.$router.push(path)
+    }
   }
 }
 </script>

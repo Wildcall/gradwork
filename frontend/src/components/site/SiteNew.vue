@@ -6,7 +6,6 @@
           v-on="on"
           class="ml-5"
           light
-          @click="$emit('home')"
       >
         Добавить сайт
       </v-btn>
@@ -49,9 +48,9 @@
             Закрыть
           </v-btn>
           <v-btn
-              text
-              @click="submit"
               :disabled="!valid"
+              @click="submit"
+              text
           >
             <v-progress-circular
                 v-if="loading"
@@ -73,7 +72,7 @@
 import {mapActions, mapGetters} from "vuex";
 
 export default {
-  name: "SiteForm",
+  name: "SiteNew",
 
   data() {
     return {
@@ -87,7 +86,7 @@ export default {
         v => !!v || 'Не может быть пустым',
         v => /^(http(s?):\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3}))(:\d+)?(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(#[-a-z\d_]*)?/.test(v) || 'Должно иметь вид https://example.com',
         v => this.availablePath(v) || 'Такой сайт уже существует'
-  ],
+      ],
       nameRules: [
         v => !!v || 'Не может быть пустым',
         v => (v && v.length <= 10) || 'Имя должно быть короче 10 символов',
@@ -117,7 +116,7 @@ export default {
       this.createSite(newSite).then((response) => {
         if (response){
           this.close()
-          this.$emit('open-tab', {id: response.id, title: response.name})
+          this.$emit('open-tab',{id: response.id, name: response.name})
         }
       })
     },
@@ -130,11 +129,11 @@ export default {
     },
 
     availableName(name) {
-      return this.sites.findIndex(obj => obj.name === name) === -1;
+      return this.sites.findIndex(obj => obj.name.toLowerCase() === name.toLowerCase()) === -1;
     },
 
     availablePath(path) {
-      return this.sites.findIndex(obj => obj.path === path) === -1;
+      return this.sites.findIndex(obj => obj.path.toLowerCase() === path.toLowerCase()) === -1;
     }
   },
 }

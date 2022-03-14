@@ -11,10 +11,6 @@
 
 <script>
 export default {
-  name: "Statistics",
-
-  props: {
-    statistics: null
-  },
+  name: "SiteStatistics",
 }
 </script>

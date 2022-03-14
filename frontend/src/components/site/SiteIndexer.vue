@@ -48,7 +48,7 @@
 <script>
 import LoadingBar from "@/components/ui/loading-bar";
 export default {
-  name: "Indexer",
+  name: "SiteIndexer",
 
   components: {LoadingBar},
 

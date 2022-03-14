@@ -106,7 +106,7 @@
 import LoadingBar from "@/components/ui/loading-bar";
 
 export default {
-  name: "Crawler",
+  name: "SiteCrawler",
 
   components: {LoadingBar},
 

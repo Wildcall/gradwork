@@ -20,7 +20,7 @@
 
 <script>
 export default {
-  name: "SiteError",
+  name: "Pages",
 
   data() {
     return {

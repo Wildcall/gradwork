@@ -1,26 +1,27 @@
 <template>
-  <v-tooltip bottom>
-    <template v-slot:activator="{ on, attrs }">
-      <v-icon
-          small
-          class="mr-5"
-          @click="$emit('click')"
-          v-bind="attrs"
-          v-on="on"
-      >
-        {{ icon }}
-      </v-icon>
-    </template>
-    <span><slot></slot></span>
-  </v-tooltip>
+  <div>
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on, attrs }">
+        <v-icon
+            v-bind="attrs"
+            v-on="on"
+        >
+          {{ icon }}
+        </v-icon>
+      </template>
+      <span>{{ title }}</span>
+    </v-tooltip>
+    <span v-if="!icon" >{{ title }}</span>
+  </div>
 </template>
 
 <script>
 export default {
   name: "tooltip-icon",
 
-  props: [
-    'icon'
-  ]
+  props: {
+    icon: String,
+    title: String,
+}
 }
 </script>

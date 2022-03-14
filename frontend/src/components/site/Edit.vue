@@ -1,27 +1,6 @@
 <template>
-  <v-card>
-    <v-toolbar dark>
-      <v-btn
-          icon
-          dark
-          @click="$emit('close')"
-      >
-        <v-icon>mdi-close</v-icon>
-      </v-btn>
-      <v-toolbar-title>Редактирование</v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-toolbar-items>
-        <v-btn
-            dark
-            text
-            @click="save"
-        >
-          Save
-        </v-btn>
-      </v-toolbar-items>
-    </v-toolbar>
+  <v-container>
     <v-list three-line>
-
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title>ID</v-list-item-title>
@@ -33,10 +12,7 @@
         <v-list-item-content>
           <v-list-item-title>Адрес сайта</v-list-item-title>
           <v-list-item-subtitle>
-            <v-text-field
-                v-model="site.path"
-            >
-            </v-text-field>
+            {{ site.path }}
           </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
@@ -45,9 +21,7 @@
         <v-list-item-content>
           <v-list-item-title>Название</v-list-item-title>
           <v-list-item-subtitle>
-            <v-text-field
-                v-model="site.name"
-            >
+            <v-text-field v-model="site.name">
             </v-text-field>
           </v-list-item-subtitle>
         </v-list-item-content>
@@ -63,7 +37,7 @@
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title>Последнее изменение</v-list-item-title>
-          <v-list-item-subtitle>{{ site.statusTime}}</v-list-item-subtitle>
+          <v-list-item-subtitle>{{ site.statusTime }}</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
 
@@ -74,6 +48,12 @@
           width="500"
       >
         <template v-slot:activator="{ on, attrs }">
+          <v-btn
+              @click="update"
+              text
+          >
+            Сохранить изменения
+          </v-btn>
           <v-btn
               text
               v-bind="attrs"
@@ -106,36 +86,32 @@
         </v-card>
       </v-dialog>
     </v-card-actions>
-  </v-card>
+  </v-container>
 </template>
 
 <script>
 export default {
-  name: "SiteEdit",
+  name: "Edit",
+
+  data() {
+    return {
+      confirm: false,
+    }
+  },
 
   props: {
     site: null
   },
 
-  data() {
-    return {
-      confirm: false
-    }
-  },
-
   methods: {
     confirmDeleting() {
       this.confirm = false
-      this.$emit('delete', this.site)
+      this.$emit('delete')
     },
-    save() {
-      //this.$emit('close')
+
+    update() {
       this.$emit('update', this.site)
-    }
+    },
   }
 }
 </script>
-
-<style scoped>
-
-</style>

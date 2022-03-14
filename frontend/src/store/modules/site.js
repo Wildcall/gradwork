@@ -1,10 +1,9 @@
 import axios from "axios";
-import {baseURL} from "@/const";
+import {siteAPI} from "@/const";
 
 const state = () => ({
     sites: [],
-    site: null,
-    errors: [],
+    views: [],
     loading: false
 })
 
@@ -12,105 +11,137 @@ const getters = {
     getSites: (state) => {
         return state.sites
     },
-    getSite: (state) => {
-        return state.site
+    getViews: (state) => {
+        return state.views
     },
     getLoading: (state) => {
         return state.loading
     },
-    getErrors: (state) => {
-        return state.errors
-    }
 }
 
 const mutations = {
     setSites(state, sites) {
         state.sites = sites
     },
-    setSite(state, site) {
-        state.site = site
-    },
     setLoading(state, bool) {
         state.loading = bool
     },
-    setErrors(state, errors) {
-        state.errors = errors
-    },
-    push(state, site) {
+
+    pushSite(state, site) {
         state.sites.push(site)
     },
-    update(state, site) {
+    pushView(state, site) {
+        state.views.push(site)
+    },
+
+    updateSite(state, site) {
         const index = state.sites.findIndex((obj => obj.id === site.id))
         state.sites.splice(index, 1)
         state.sites.push(site)
     },
-    delete(state, site) {
-        state.sites.splice(state.sites.indexOf(site), 1)
-    }
+
+    updateView(state, site) {
+        const index = state.views.findIndex((obj => obj.id === site.id))
+        state.views.splice(index, 1)
+        state.views.push(site)
+    },
+
+    deleteSite(state, id) {
+        const index = state.sites.findIndex(obj => obj.id === id)
+        state.sites.splice(index, 1)
+    },
+
+    deleteView(state, id) {
+        const index = state.views.findIndex(obj => obj.id === id)
+        state.views.splice(index, 1)
+    },
 }
 
-// Standard CRUD Operations
 const actions = {
-    // CREATE
-    async createSite({commit}, site) {
-        try {
-            const response = await axios.post(baseURL + '/site', site)
-            commit('push', response.data)
-        } catch (e) {
-            console.log(e)
-        }
-    },
-    // READ
-    async readSites({ commit }) {
+    // Get list of sites
+    async fetchSites({ commit }) {
         try {
             commit('setLoading', true)
-            const response = await axios.get(baseURL + '/site')
+            const response = await axios.get(siteAPI)
             commit('setSites', response.data)
+            return response.data
         } catch(error) {
             console.log(error)
         } finally {
             commit('setLoading', false)
         }
     },
-    async readSite({ commit}, id) {
+    // Get a specific site
+    async fetchSite({ commit}, id) {
         try {
-            const response = await axios.get(baseURL + '/site/' + id)
-            commit('setSite', response.data)
+            commit('setLoading', true)
+            const response = await axios.get(siteAPI + id)
+            commit('pushView', response.data)
+            return response.data
         } catch(e) {
             console.log(e)
+        } finally {
+            commit('setLoading', false)
         }
     },
-    async readSiteErrors({commit}, id) {
+    // Create a new site
+    async createSite({commit}, site) {
         try {
-            const response = await axios.get(baseURL + '/error/' + id)
-            commit('setErrors', response.data)
-        } catch (e) {
-            console.log(e)
+            commit('setLoading', true)
+            const response = await axios.post(siteAPI, site)
+            commit('pushSite',
+                {
+                    id: response.data.id,
+                    name: response.data.name,
+                    path: response.data.path,
+                    status: response.data.status
+                })
+            return response.data
+        }
+        catch(error) {
+            console.log(error)
+        } finally {
+            commit('setLoading', false)
         }
     },
-    // UPDATE
+    // Change a site
     async updateSite({commit}, site) {
         try {
+            commit('setLoading', true)
             const data = {
-                id: site.id,
-                path: site.path,
-                name: site.name
+                name: site.name,
+                crawlerId: site.crawlerId,
+                indexerId: site.indexerId
             }
-            const response = await axios.put(baseURL + '/site/' + site.id, data)
-            commit('update', response.data)
+            const response = await axios.put(siteAPI + site.id, data)
+            commit('updateSite',
+                {
+                    id: response.data.id,
+                    name: response.data.name,
+                    path: response.data.path,
+                    status: response.data.status
+                })
+            commit('updateView', response.data)
+            return response.data
+        } catch (e) {
+            console.log(e)
+        } finally {
+            commit('setLoading', false)
+        }
+    },
+    // Delete a site
+    async deleteSite({commit}, id) {
+        try {
+            await axios.delete(siteAPI + id)
+            commit('deleteSite', id)
         } catch (e) {
             console.log(e)
         }
     },
-    // DELETE
-    async deleteSite({commit}, site) {
-        try {
-            await axios.delete(baseURL + '/site/' + site.id)
-            commit('delete', site)
-        } catch (e) {
-            console.log(e)
-        }
-    }
+
+    deleteView({commit}, id) {
+        commit('deleteView', id)
+    },
 }
 
 export default {

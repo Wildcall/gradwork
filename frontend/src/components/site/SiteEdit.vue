@@ -1,7 +1,7 @@
 <template>
   <v-card
       v-if="site"
-      flat
+      elevation="5"
   >
     <v-form
         ref="form"
@@ -142,7 +142,6 @@ export default {
       nameRules: [
         v => !!v || 'Не может быть пустым',
         v => (v && v.length <= 10) || 'Имя должно быть короче 10 символов',
-        v => this.siteName.toLowerCase() === v.toLowerCase() || '',
         v => this.availableName(v) || 'Имя уже занято'
       ],
     }

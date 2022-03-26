@@ -91,7 +91,10 @@ const actions = {
     },
 
     deleteTab({commit}, link) {
+        const id = Number(link.match(/(\d+)/)[0])
         commit('deleteTab', link)
+        commit('page/deletePages', {siteId: id}, {root: true})
+        commit('error/deleteErrors', {siteId: id}, {root: true})
     },
 
     initTabs({commit}) {
@@ -108,5 +111,5 @@ export default {
     state,
     getters,
     actions,
-    mutations
+    mutations,
 }

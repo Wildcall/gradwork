@@ -10,61 +10,21 @@
     <v-divider class="mt-5 mb-5"/>
 
     <v-list dense>
-      <v-list-item-group mandatory>
-
-        <v-list-item @click="push(items[0].path)">
+      <v-list-item-group
+        mandatory
+        v-model="tab"
+      >
+        <v-list-item
+            v-for="(item, i) in items"
+            :key="i"
+            @click="item.path === 'close' ? $emit(item.path) :push(item.path)"
+        >
           <v-list-item-content>
             <v-list-item-title>
-              {{ items[0].title }}
+              {{item.title }}
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item @click="push(items[1].path)">
-          <v-list-item-content>
-            <v-list-item-title>
-              {{ items[1].title }}
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item @click="push(items[2].path)">
-          <v-list-item-content>
-            <v-list-item-title>
-              {{ items[2].title }}
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item @click="push(items[3].path)">
-          <v-list-item-content>
-            <v-list-item-title>
-              {{ items[3].title }}
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item @click="push(items[4].path)">
-          <v-list-item-content>
-            <v-list-item-title>
-              {{ items[4].title }}
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item @click="push(items[5].path)">
-          <v-list-item-content>
-            <v-list-item-title>
-              {{ items[5].title }}
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-divider class="mt-5 mb-5"/>
-
-        <v-list-item @click="$emit(items[6].path)">
-          <v-list-item-content>
-            <v-list-item-title>
-              {{ items[6].title }}
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
       </v-list-item-group>
     </v-list>
   </v-card>
@@ -76,12 +36,12 @@ export default {
 
   data() {
     return {
-      tab: null,
+      tab: 0,
       items: [
         { title: 'Редактирование', path: 'edit' },
         { title: 'Статистика', path: 'stat' },
         { title: 'Crawler', path: 'crawler' },
-        { title: 'Indexer', path: 'presetCrawler' },
+        { title: 'Indexer', path: 'indexer' },
         { title: 'Страницы', path: 'pages' },
         { title: 'Ошибки', path: 'errors' },
         { title: 'Закрыть', path: 'close' },
@@ -90,14 +50,24 @@ export default {
   },
 
   props: {
+    reset: Boolean,
     title: String,
     subtext: String,
   },
 
   methods:{
     push(path){
-      this.$router.push(path)
+      if (!this.$route.path.endsWith(path))
+        this.$router.push(path)
+    },
+  },
+
+  updated() {
+    if (this.reset){
+      this.tab = 0
+      this.$emit('update:reset', false)
     }
+
   }
 }
 </script>

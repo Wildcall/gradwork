@@ -14,5 +14,21 @@ import NavigationBar from "@/components/ui/NavigationBar";
 
 export default {
   components: {NavigationBar},
+
+  created() {
+    let SockJS = require('sockjs-client')
+    let sock = new SockJS("http://localhost:8000/ws")
+    sock.onopen = function () {
+      console.log('open')
+    }
+
+    sock.onmessage = function (e) {
+      console.log('message ', e.data)
+    }
+
+    sock.onclose = function () {
+      console.log('close')
+    }
+  }
 }
 </script>

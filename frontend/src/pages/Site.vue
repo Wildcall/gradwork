@@ -14,6 +14,7 @@
           <site-menu
               :title="site.name"
               :subtext="site.path"
+              :reset.sync="reset"
               v-on:close="closeTab"
           />
         </v-col>
@@ -41,7 +42,8 @@ export default {
 
   data() {
     return {
-      site: null
+      site: null,
+      reset: false,
     }
   },
 
@@ -64,6 +66,8 @@ export default {
 
   beforeRouteUpdate(to, from, next) {
     this.site = this.sites.find(obj => obj.id === Number(to.params.id))
+    if (from.params.id !== to.params.id)
+      this.reset = true
     next()
   },
 

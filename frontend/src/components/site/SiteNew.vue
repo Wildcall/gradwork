@@ -4,10 +4,9 @@
       <v-btn
           v-bind="attrs"
           v-on="on"
-          class="ml-5"
-          light
+          text
       >
-        Добавить сайт
+        <slot></slot>
       </v-btn>
     </template>
     <v-form

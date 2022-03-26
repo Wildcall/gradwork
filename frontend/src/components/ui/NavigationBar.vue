@@ -20,7 +20,7 @@
         <v-tab
             v-for="item in storageTabs"
             :key="item.link"
-            @click="$route.path !== item.link ? $router.push(item.link) : true"
+            @click="following(item)"
         >
           <tooltip-icon
               :title="item.title"
@@ -61,6 +61,15 @@ export default {
 
       storageAddTab: 'storage/addTab',
     }),
+
+    following(item) {
+      item.link.includes(this.$route.params.id)
+      if (this.$route.path !== item.link) {
+        if (!item.link.includes('/' + this.$route.params.id + '/')){
+          this.$router.push(item.link)
+        }
+      }
+    },
   },
 
   beforeMount() {
@@ -72,7 +81,6 @@ export default {
     if (this.$route.path === '/'){
       this.tab = 0
     }
-
   }
 }
 </script>

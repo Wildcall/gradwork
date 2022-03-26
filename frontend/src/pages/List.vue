@@ -9,7 +9,10 @@
           hide-details
           solo-inverted
       />
-      <site-new v-on:open-tab="open"/>
+      <v-spacer/>
+      <site-new v-on:open-tab="open">
+        Добавить сайт
+      </site-new>
     </v-toolbar>
     <v-data-table
         :headers="headers"
@@ -28,7 +31,9 @@ import SiteNew from "@/components/site/SiteNew";
 
 export default {
   name: "List",
+
   components: {SiteNew},
+
   data() {
     return {
       search: '',
@@ -51,6 +56,7 @@ export default {
   methods: {
     ...mapActions({
       fetchSites: 'site/fetchSites',
+
       storageInitTabs: 'storage/initTabs',
       storageAddTab: 'storage/addTab'
     }),

@@ -31,7 +31,7 @@
 <script>
 import {mapActions, mapGetters} from "vuex";
 
-import siteMenu from "@/components/ui/site-menu";
+import siteMenu from "../component/ui/site-menu.vue";
 
 export default {
   name: "Site",

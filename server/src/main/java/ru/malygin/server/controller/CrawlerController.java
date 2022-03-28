@@ -15,6 +15,8 @@ import ru.malygin.server.model.dto.transfer.CrawlerSettingsViews;
 import ru.malygin.server.service.CrawlerActionService;
 import ru.malygin.server.service.CrawlerService;
 
+// TODO: 12.03.2022 добавлена искусственная задержка
+
 @RestController
 @RequestMapping("/api/v1/crawler")
 public class CrawlerController {
@@ -28,9 +30,14 @@ public class CrawlerController {
     }
 
     @GetMapping
-    @JsonView({CrawlerSettingsViews.IdNamePreset.class})
+    @JsonView({CrawlerSettingsViews.FullView.class})
     public ResponseEntity<?> findAll(
             @RequestParam(required = false) Boolean preset) {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return ResponseEntity.ok(CrawlerSettingsDto.fromListCrawlerSettings(crawlerService.findAll(preset)));
     }
 
@@ -38,6 +45,11 @@ public class CrawlerController {
     @JsonView({CrawlerSettingsViews.FullView.class})
     public ResponseEntity<?> findOne(
             @PathVariable Long id) {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         try {
             return ResponseEntity.ok(CrawlerSettingsDto.fromCrawlerSettings(crawlerService.findById(id)));
         } catch (CrawlerSettingsNotFoundException e) {
@@ -49,6 +61,11 @@ public class CrawlerController {
     @JsonView({CrawlerSettingsViews.FullView.class})
     public ResponseEntity<?> save(
             @Validated(CrawlerSettingsViews.New.class) @RequestBody CrawlerSettingsDto csd) {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         try {
             return ResponseEntity.ok(CrawlerSettingsDto.fromCrawlerSettings(crawlerService.save(csd.toCrawlerSettings())));
         } catch (CrawlerSettingsAlreadyExistsException e) {
@@ -62,6 +79,11 @@ public class CrawlerController {
             @PathVariable Long id,
             @Validated(CrawlerSettingsViews.Update.class) @RequestBody CrawlerSettingsDto csd) {
         try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        try {
             return ResponseEntity.ok(CrawlerSettingsDto.fromCrawlerSettings(crawlerService.update(id, csd.toCrawlerSettings())));
         } catch (CrawlerSettingsNotFoundException | CrawlerSettingsAlreadyExistsException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -71,6 +93,11 @@ public class CrawlerController {
     @DeleteMapping("{id}")
     public ResponseEntity<?> delete(
             @PathVariable Long id) {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         try {
             return ResponseEntity.ok(crawlerService.delete(id));
         } catch (CrawlerSettingsNotFoundException | CrawlerSettingsCannotBeRemovedException e) {

@@ -27,7 +27,7 @@
 
 <script>
 import {mapActions, mapGetters} from "vuex";
-import SiteNew from "@/components/site/SiteNew";
+import SiteNew from "../component/site/SiteNew.vue";
 
 export default {
   name: "List",

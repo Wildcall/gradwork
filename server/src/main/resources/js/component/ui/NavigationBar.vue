@@ -34,7 +34,7 @@
 
 <script>
 import {mapActions, mapGetters} from "vuex";
-import tooltipIcon from "@/components/ui/tooltip-icon";
+import tooltipIcon from "./tooltip-icon.vue";
 
 export default {
   name: "NavigationBar",

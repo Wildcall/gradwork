@@ -1,5 +1,5 @@
 import axios from "axios";
-import {siteAPI} from "@/const";
+import {siteAPI} from "../../const";
 
 const state = () => ({
     sites: [],

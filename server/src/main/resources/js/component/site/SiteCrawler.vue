@@ -127,9 +127,9 @@
 </template>
 
 <script>
-import LoadingBar from "@/components/ui/loading-bar";
+import LoadingBar from "../../component/ui/loading-bar.vue";
+import CrawlerForm from "../../component/ui/crawler-form.vue";
 import {mapActions, mapGetters} from "vuex";
-import CrawlerForm from "@/components/ui/crawler-form";
 
 export default {
   name: "SiteCrawler",

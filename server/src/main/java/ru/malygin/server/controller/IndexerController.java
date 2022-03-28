@@ -12,6 +12,8 @@ import ru.malygin.server.model.dto.transfer.IndexerSettingsViews;
 import ru.malygin.server.service.IndexerActionService;
 import ru.malygin.server.service.IndexerService;
 
+// TODO: 12.03.2022 добавлена искусственная задержка
+
 @RestController
 @RequestMapping("/api/v1/indexer")
 public class IndexerController {
@@ -25,9 +27,14 @@ public class IndexerController {
     }
 
     @GetMapping
-    @JsonView({IndexerSettingsViews.IdNamePreset.class})
+    @JsonView({IndexerSettingsViews.FullView.class})
     public ResponseEntity<?> findAll(
             @RequestParam(required = false) Boolean preset) {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return ResponseEntity.ok(IndexerSettingsDto.fromListIndexerSettings(indexerService.findAll(preset)));
     }
 
@@ -35,6 +42,11 @@ public class IndexerController {
     @JsonView({IndexerSettingsViews.FullView.class})
     public ResponseEntity<?> findOne(
             @PathVariable Long id) {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         try {
             return ResponseEntity.ok(IndexerSettingsDto.fromIndexerSettings(indexerService.findById(id)));
         } catch (IndexerSettingsNotFoundException e) {
@@ -46,6 +58,11 @@ public class IndexerController {
     @JsonView({IndexerSettingsViews.FullView.class})
     public ResponseEntity<?> save(
             @Validated(IndexerSettingsViews.New.class) @RequestBody IndexerSettingsDto isd) {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         try {
             return ResponseEntity.ok(IndexerSettingsDto.fromIndexerSettings(indexerService.save(isd.toIndexerSettings())));
         } catch (IndexerSettingsAlreadyExistsException e) {
@@ -59,6 +76,11 @@ public class IndexerController {
             @PathVariable Long id,
             @Validated(IndexerSettingsViews.Update.class) @RequestBody IndexerSettingsDto isd) {
         try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        try {
             return ResponseEntity.ok(IndexerSettingsDto.fromIndexerSettings(indexerService.update(id, isd.toIndexerSettings())));
         } catch (IndexerSettingsNotFoundException | IndexerSettingsAlreadyExistsException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -68,6 +90,11 @@ public class IndexerController {
     @DeleteMapping("{id}")
     public ResponseEntity<?> delete(
             @PathVariable Long id) {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         try {
             return ResponseEntity.ok(indexerService.delete(id));
         } catch (IndexerSettingsNotFoundException | IndexerSettingsCannotBeRemovedException e) {

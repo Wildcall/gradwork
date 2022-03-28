@@ -1,18 +1,18 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-import List from "@/pages/List";
-import Summary from "@/pages/Summary";
-import Crawler from "@/pages/Crawler";
-import Indexer from "@/pages/Indexer";
-import Site from "@/pages/Site";
+import List from "../pages/List.vue";
+import Summary from "../pages/Summary.vue";
+import Crawler from "../pages/Crawler.vue";
+import Indexer from "../pages/Indexer.vue";
+import Site from "../pages/Site.vue";
 
-import SiteEdit from "@/components/site/SiteEdit";
-import SiteStatistics from "@/components/site/SiteStatistics";
-import SiteCrawler from "@/components/site/SiteCrawler";
-import SiteIndexer from "@/components/site/SiteIndexer";
-import SiteErrors from "@/components/site/SiteErrors";
-import SitePages from "@/components/site/SitePages";
+import SiteEdit from "../component/site/SiteEdit.vue";
+import SiteStatistics from "../component/site/SiteStatistics.vue";
+import SiteCrawler from "../component/site/SiteCrawler.vue";
+import SiteIndexer from "../component/site/SiteIndexer.vue";
+import SiteErrors from "../component/site/SiteErrors.vue";
+import SitePages from "../component/site/SitePages.vue";
 
 Vue.use(VueRouter)
 

@@ -1,5 +1,5 @@
 import axios from "axios";
-import {siteErrorsAPI} from "@/const";
+import {siteErrorsAPI} from "../../const";
 
 const state = () => ({
     data: [],

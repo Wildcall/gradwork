@@ -1,5 +1,5 @@
 import axios from "axios";
-import {crawlerAPI} from "@/const";
+import {crawlerAPI} from "../../const";
 
 const state = () => ({
     crawling: [],

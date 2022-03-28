@@ -8,10 +8,13 @@ import ru.malygin.server.exception.page.PageNotFoundException;
 import ru.malygin.server.exception.site.SiteNotFoundException;
 import ru.malygin.server.model.dto.PageDto;
 import ru.malygin.server.model.dto.transfer.PageViews;
+import ru.malygin.server.model.entity.core.Page;
 import ru.malygin.server.service.PageService;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+// TODO: 12.03.2022 добавлена искусственная задержка
 
 @RestController
 @RequestMapping("/api/v1/page")
@@ -28,6 +31,11 @@ public class PageController {
     public ResponseEntity<?> find(
             @RequestParam(required = false) Long siteId) {
         try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        try {
             return ResponseEntity.ok(
                     PageDto.fromListPage(
                             pageService.findBySite(siteId)));
@@ -41,6 +49,11 @@ public class PageController {
     public ResponseEntity<?> findById(
             @PathVariable Long id) {
         try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        try {
             return ResponseEntity.ok(
                     PageDto.fromPage(
                             pageService.findById(id)));
@@ -53,6 +66,11 @@ public class PageController {
     @JsonView({PageViews.IdPathBlHi.class})
     public ResponseEntity<?> updateAll(
             @Validated(PageViews.Update.class) @RequestBody List<PageDto> pages) {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return ResponseEntity.ok(
                 PageDto.fromListPage(
                         pageService.updateAll(
@@ -65,6 +83,11 @@ public class PageController {
     public ResponseEntity<?> deleteBySite(
             @RequestParam Long siteId) {
         try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        try {
             return ResponseEntity.ok(
                     PageDto.fromListPage(
                             pageService.deleteBySite(siteId)));
@@ -72,5 +95,4 @@ public class PageController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
 }

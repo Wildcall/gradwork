@@ -68,12 +68,6 @@ public class SiteService {
             existSite.setStatusTime(LocalDateTime.now());
         }
 
-        if (!existSite.getStatus().equals(site.getStatus())) {
-            if(site.getStatus().equals(SiteStatus.INORDER)) {
-                existSite.setStatus(site.getStatus());
-            }
-        }
-
         if (site.getCrawler() != null && !existSite.getCrawler().equals(site.getCrawler())) {
             CrawlerSettings cs = csService.findById(site.getCrawler().getId());
             existSite.setCrawler(cs);

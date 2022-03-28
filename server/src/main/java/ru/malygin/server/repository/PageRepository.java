@@ -1,5 +1,6 @@
 package ru.malygin.server.repository;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.malygin.server.model.entity.core.Page;
@@ -13,6 +14,7 @@ public interface PageRepository extends CrudRepository<Page, Long> {
     Optional<Page> findByPath(String path);
     List<Page> findAllBySiteAndHasIndexAndBlacklist(Site site, Boolean hasIndex, Boolean blacklist);
     List<Page> findAllBySite(Site site);
+    List<Page> findAllBySite(Site site, Pageable pageable);
     @Transactional
     void deleteBySite(Site site);
 }

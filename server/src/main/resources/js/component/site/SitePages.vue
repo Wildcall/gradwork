@@ -47,7 +47,7 @@
 
 <script>
 import {mapActions, mapGetters} from "vuex";
-import LoadingBar from "@/components/ui/loading-bar";
+import LoadingBar from "../../component/ui/loading-bar.vue";
 
 export default {
   name: "SitePages",

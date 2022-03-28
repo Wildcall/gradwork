@@ -49,7 +49,7 @@ public class CrawlerService {
         CrawlerSettings ecs = findById(id);
         boolean saveFlag = false;
 
-        if (!ecs.getPresetName().equals(cs.getPresetName())) {
+        if (!ecs.getPresetName().equals(cs.getPresetName()) && !ecs.getPresetName().equals("default")) {
             existByPresetName(cs.getPresetName());
             ecs.setPresetName(cs.getPresetName());
             saveFlag = true;
@@ -103,10 +103,14 @@ public class CrawlerService {
      * @param id настроек
      * @return Long id удаленной настройки
      * @throws CrawlerSettingsNotFoundException если настройки с таким id не существуют
-     * @throws CrawlerSettingsCannotBeRemovedException если настройки с таким id используется
+     * @throws CrawlerSettingsCannotBeRemovedException если настройки с таким id используется или являются шаблоном по умолчанию
      */
     public Long delete(Long id) throws CrawlerSettingsNotFoundException, CrawlerSettingsCannotBeRemovedException {
         CrawlerSettings cs = findById(id);
+        if (cs.getPresetName().equals("default")) {
+            throw new CrawlerSettingsCannotBeRemovedException("Crawler settings with id " + id +
+                    " cannot be removed. Reason: there are default preset");
+        }
         if (!cs.getSites().isEmpty()) {
             throw new CrawlerSettingsCannotBeRemovedException("Crawler settings with id " + id +
                     " cannot be removed. Reason: there are sites with current settings");
@@ -155,6 +159,20 @@ public class CrawlerService {
         }
 
         return null;
+    }
+
+
+    /**
+     * Создает в БД запись со стандартными настройками
+     * @return строка для печати в консоль
+     */
+    public String init() {
+        try {
+            save(crawlerConf.getDefault());
+            return "Default crawler settings successfully saved";
+        } catch (CrawlerSettingsAlreadyExistsException e) {
+            return "Default crawler settings already existed";
+        }
     }
 
     private void existByPresetName(String name) throws  CrawlerSettingsAlreadyExistsException {

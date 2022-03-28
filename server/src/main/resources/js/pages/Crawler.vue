@@ -1,5 +1,5 @@
 <template>
-  <v-card class="ma-5" elevation="5" >
+  <v-card class="ma-5" elevation="5">
     <v-toolbar flat>
       <v-text-field
           v-model="search"
@@ -10,7 +10,7 @@
           solo-inverted
       />
       <v-spacer/>
-      <v-btn @click="createForm"
+      <v-btn @click="createFrom"
              text
       >
         Добавить шаблон
@@ -20,43 +20,42 @@
       <v-row>
         <v-col>
           <v-data-table
-              :headers="headers"
-              :items="indexers"
-              :loading="loading"
-              :search="search"
-              item-key="id"
-              @click:row="editForm"
-          >
-            <template v-slot:item="{ item }">
-              <tr :class="item.id === selected ? 'grey lighten-3' : 'white'"
-                  @click="editForm(item)">
-                <td>{{ item.id }}</td>
-                <td>{{ item.presetName }}</td>
-                <td>{{ item.description }}</td>
-                <td>
-                  <v-simple-checkbox
-                      v-model="item.preset"
-                      disabled
-                  />
-                </td>
-                <td>{{ item.siteCount }}</td>
-              </tr>
-            </template>
-          </v-data-table>
+                :headers="headers"
+                :items="crawlers"
+                :loading="loading"
+                :search="search"
+                item-key="id"
+            >
+              <template v-slot:item="{ item }">
+                <tr :class="item.id === selected ? 'grey lighten-3' : 'white'"
+                    @click="editForm(item)">
+                  <td>{{ item.id }}</td>
+                  <td>{{ item.presetName }}</td>
+                  <td>{{ item.description }}</td>
+                  <td>
+                    <v-simple-checkbox
+                        v-model="item.preset"
+                        disabled
+                    />
+                  </td>
+                  <td>{{ item.siteCount }}</td>
+                </tr>
+              </template>
+            </v-data-table>
         </v-col>
         <v-col class="d-flex align-stretch">
-          <indexer-form v-show="showEditForm"
+          <crawler-form v-show="showEditForm"
                         class="flex-grow-1 flex-shrink-0"
                         :disabled="false"
                         :submit-btn-text="submitBtnText"
                         :delete-btn="showDeleteBtn"
-                        :indexer="this.indexer"
+                        :crawler="this.crawler"
                         v-on:submit="submitForm"
                         v-on:cancel="closeForm"
                         v-on:remove="confirmRemove = true"
           >
             Текущая настройка
-          </indexer-form>
+          </crawler-form>
           <v-card v-show="!showEditForm"
                   class="flex-grow-1 flex-shrink-0">
             <v-card-title>
@@ -116,12 +115,12 @@
 
 <script>
 import {mapActions, mapGetters} from "vuex";
-import IndexerForm from "@/components/ui/indexer-form";
+import CrawlerForm from "../component/ui/crawler-form.vue";
 
 export default {
-  name: "Indexer",
+  name: "Crawler",
 
-  components: {IndexerForm},
+  components: {CrawlerForm},
 
   data() {
     return {
@@ -136,7 +135,7 @@ export default {
       selected: null,
 
       showEditForm: false,
-      indexer: null,
+      crawler: null,
 
       confirmRemove: false,
       showDeleteBtn: false,
@@ -150,47 +149,47 @@ export default {
 
   computed: {
     ...mapGetters({
-      indexers: 'settings/getIndexers',
+      crawlers: 'settings/getCrawlers',
       loading: 'settings/getLoading',
     })
   },
 
   methods: {
     ...mapActions({
-      fetchIndexers: 'settings/fetchIndexers',
-      deleteIndexer: 'settings/deleteIndexer',
-      createIndexer: 'settings/createIndexer',
-      updateIndexer: 'settings/updateIndexer',
+      fetchCrawlers: 'settings/fetchCrawlers',
+      deleteCrawler: 'settings/deleteCrawler',
+      createCrawler: 'settings/createCrawler',
+      updateCrawler: 'settings/updateCrawler',
     }),
 
     submitForm(item) {
       if (item) {
         if (item.id) {
-          if (this.indexer.presetName === 'default') {
-            item.presetName = this.indexer.presetName
+          if (this.crawler.presetName === 'default') {
+            item.presetName = this.crawler.presetName
           }
-          this.updateIndexer(item).then(() => {
-            this.indexer = this.indexers.find(obj => obj.presetName.toLowerCase() === item.presetName.toLowerCase())
+          this.updateCrawler(item).then(() => {
+            this.crawler = this.crawlers.find(obj => obj.presetName.toLowerCase() === item.presetName.toLowerCase())
           })
         } else {
           item.preset = true
-          this.createIndexer(item).then(() => {
-            this.indexer = this.indexers.find(obj => obj.presetName.toLowerCase() === item.presetName.toLowerCase())
+          this.createCrawler(item).then(() => {
+            this.crawler = this.crawlers.find(obj => obj.presetName.toLowerCase() === item.presetName.toLowerCase())
           })
         }
       }
     },
 
     remove() {
-      if (this.indexer.id === 1) {
+      if (this.crawler.id === 1) {
         this.warningMessage = 'Невозможно удалить шаблон по умолчанию'
         this.warningSnackbar = true
         this.confirmRemove = false
         return
       }
 
-      if (this.indexer.siteCount === 0) {
-        this.deleteIndexer(this.indexer.id).then(() => {
+      if (this.crawler.siteCount === 0) {
+        this.deleteCrawler(this.crawler.id).then(() => {
           this.closeForm()
         })
       } else {
@@ -200,22 +199,27 @@ export default {
       }
     },
 
-    createForm() {
+    createFrom() {
       this.selected = null
-      this.indexer = {}
+      this.crawler = {}
       this.showEditForm = true
       this.showDeleteBtn = false
       this.submitBtnText = 'Сохранить'
 
-      const tmp = this.indexers.find(obj => obj.presetName === 'default');
-      this.indexer.id = null
-      this.indexer.presetName = ''
-      this.indexer.description = ''
-      this.indexer.selectorWeight = tmp.selectorWeight
+      const tmp = this.crawlers.find(obj => obj.presetName === 'default');
+      this.crawler.id = null
+      this.crawler.presetName = ''
+      this.crawler.description = ''
+      this.crawler.parallelism = tmp.parallelism
+      this.crawler.timeout = tmp.timeout
+      this.crawler.delay = tmp.delay
+      this.crawler.reconnect = tmp.reconnect
+      this.crawler.referrer = tmp.referrer
+      this.crawler.userAgent = tmp.userAgent
     },
 
     editForm(item) {
-      this.indexer = item
+      this.crawler = item
       this.selected = item.id
       this.showDeleteBtn = true
       this.submitBtnText = 'Обновить'
@@ -225,14 +229,14 @@ export default {
     closeForm() {
       this.confirmRemove = false
       this.selected = null
-      this.indexer = null
+      this.crawler = null
       this.showEditForm = false
     },
   },
 
   mounted() {
-    if (this.indexers.length === 0){
-      this.fetchIndexers().then(() => {
+    if (this.crawlers.length === 0){
+      this.fetchCrawlers().then(() => {
       })
     }
   }

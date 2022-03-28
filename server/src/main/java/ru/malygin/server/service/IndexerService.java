@@ -3,6 +3,8 @@ package ru.malygin.server.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.malygin.server.configuration.IndexerConfiguration;
+import ru.malygin.server.exception.crawler.CrawlerSettingsAlreadyExistsException;
+import ru.malygin.server.exception.crawler.CrawlerSettingsCannotBeRemovedException;
 import ru.malygin.server.exception.indexer.IndexerSettingsAlreadyExistsException;
 import ru.malygin.server.exception.indexer.IndexerSettingsCannotBeRemovedException;
 import ru.malygin.server.exception.indexer.IndexerSettingsNotFoundException;
@@ -48,7 +50,7 @@ public class IndexerService {
         IndexerSettings eis = findById(id);
         boolean saveFlag = false;
 
-        if (!eis.getPresetName().equals(is.getPresetName())) {
+        if (!eis.getPresetName().equals(is.getPresetName()) && !eis.getPresetName().equals("default")) {
             existByPresetName(is.getPresetName());
             eis.setPresetName(is.getPresetName());
             saveFlag = true;
@@ -77,10 +79,14 @@ public class IndexerService {
      * @param id настроек
      * @return Long id удаленной настройки
      * @throws IndexerSettingsNotFoundException если настройки с таким id не существуют
-     * @throws IndexerSettingsCannotBeRemovedException если настройки с таким id используется
+     * @throws IndexerSettingsCannotBeRemovedException если настройки с таким id используется или являются шаблоном по умолчанию
      */
     public Long delete(Long id) throws IndexerSettingsNotFoundException, IndexerSettingsCannotBeRemovedException {
         IndexerSettings is = findById(id);
+        if (is.getPresetName().equals("default")) {
+            throw new IndexerSettingsCannotBeRemovedException("Indexer settings with id " + id +
+                    " cannot be removed. Reason: there are default preset");
+        }
         if (!is.getSites().isEmpty()) {
             throw new IndexerSettingsCannotBeRemovedException("Indexer settings with id " + id +
                     " cannot be removed. Reason: there are sites with current settings");
@@ -106,6 +112,7 @@ public class IndexerService {
      * @return IndexerSettings
      * @throws IndexerSettingsNotFoundException  если настройки с таким id не существуют
      */
+
     public IndexerSettings findById(Long id) throws IndexerSettingsNotFoundException {
         return isr.findById(id)
                 .orElseThrow(() -> new IndexerSettingsNotFoundException("Indexer preset with id: " + id + " not found"));
@@ -117,12 +124,24 @@ public class IndexerService {
      * @return IndexerSettings
      */
     public IndexerSettings getDefault() {
-        return isr.findByPresetName("default").orElse(isr.save(indexerConf.getDefault()));
+        return isr.findByPresetName("default").orElseGet(() -> isr.save(indexerConf.getDefault()));
+    }
+
+    /**
+     * Создает в БД запись со стандартными настройками
+     * @return строка для печати в консоль
+     */
+    public String init() {
+        try {
+            save(indexerConf.getDefault());
+            return "Default indexer settings successfully saved";
+        } catch (IndexerSettingsAlreadyExistsException e) {
+            return "Default indexer settings already existed";
+        }
     }
 
     private void existByPresetName(String name) throws IndexerSettingsAlreadyExistsException {
         if (isr.existsByPresetName(name))
             throw new IndexerSettingsAlreadyExistsException("Indexer preset with name: " + name + " already has existed");
     }
-
 }

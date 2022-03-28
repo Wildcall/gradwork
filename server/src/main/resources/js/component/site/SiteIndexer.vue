@@ -120,9 +120,9 @@
 </template>
 
 <script>
-import LoadingBar from "@/components/ui/loading-bar";
+import LoadingBar from "../../component/ui/loading-bar.vue";
+import IndexerForm from "../../component/ui/indexer-form.vue";
 import {mapActions, mapGetters} from "vuex";
-import IndexerForm from "@/components/ui/indexer-form";
 
 export default {
   name: "SiteIndexer",

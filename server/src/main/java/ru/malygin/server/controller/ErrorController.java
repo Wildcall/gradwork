@@ -24,6 +24,11 @@ public class ErrorController {
     public ResponseEntity<?> find(
             @RequestParam(required = false) Long siteId) {
         try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        try {
             return ResponseEntity.ok(ErrorDto.fromListError(errorService.find(siteId)));
         } catch (SiteNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -35,6 +40,11 @@ public class ErrorController {
     public ResponseEntity<?> findById(
             @PathVariable Long id) {
         try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        try {
             return ResponseEntity.ok(ErrorDto.fromError(errorService.findById(id)));
         } catch (ErrorNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -44,6 +54,11 @@ public class ErrorController {
     @DeleteMapping
     public ResponseEntity<?> deleteBySite(
             @RequestParam Long siteId) {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         try {
             errorService.deleteBySite(siteId);
             return ResponseEntity.ok(siteId);
